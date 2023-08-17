@@ -10,9 +10,7 @@ app.config.from_object(Config())
 @app.route('/')
 def index():
     todo = get_items()
-    print(todo)
     todo = sorted(todo, key=lambda x: x['status'], reverse=True)
-    print(todo)
     return render_template('index.html', todo=todo)
 
 @app.route('/todo/submit', methods=['POST'])
@@ -36,6 +34,3 @@ def update_todo():
         save_item(item)
 
     return redirect(url_for('index'))
-
-if __name__ == '__main__':
-    app.run()
