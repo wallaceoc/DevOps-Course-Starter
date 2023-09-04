@@ -15,8 +15,8 @@
         <ul class="list-group mb-4">
           {% for item in todo %}
             <li>
-              <input type="checkbox" id="{{ item.id }}" name="{{ item.id }}" value="{{ item.status }}" {{'checked' if item.status=='Completed' else ''}} onclick="toggle_check(this)">
-                {{item.title}}
+              <input type="checkbox" id="{{ item.id }}" name="{{ item.id }}" value="{{ item.idList }}" {{'checked' if item.idList==completed_list_id else ''}}>
+                {{item.name}}
               </input>
             </li>
           {% endfor %}
@@ -24,18 +24,6 @@
         <div class="input-group mb-3">
           <button>Update List Status</button>
         </div>
-
-        <script>
-          function toggle_check(check) {
-            if(check.value=="on") {
-              check.value="off";
-            }
-            else {
-              check.value="on"
-            }
-          }
-        </script>
-
       </form>      
     </div>
   </div>

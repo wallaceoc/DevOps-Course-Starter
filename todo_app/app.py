@@ -1,7 +1,10 @@
 from flask import Flask, redirect, url_for, render_template, request
 
 from todo_app.flask_config import Config
-from todo_app.data.session_items import get_item, get_items, add_item, save_item
+#from todo_app.data.session_items import add_item, save_item
+from todo_app.data.trello_items import get_items, save_item, add_item
+
+import os
 
 app = Flask(__name__)
 app.config.from_object(Config())
@@ -10,27 +13,29 @@ app.config.from_object(Config())
 @app.route('/')
 def index():
     todo = get_items()
-    todo = sorted(todo, key=lambda x: x['status'], reverse=True)
-    return render_template('index.html', todo=todo)
+    corndel_done_list = os.getenv('CORNDEL_DONE_LIST_ID')
+    sorted_todo = sorted(todo, key=lambda x: x['idList'], reverse=True)
+    return render_template('index.html', todo=sorted_todo, completed_list_id=corndel_done_list)
 
 @app.route('/todo/submit', methods=['POST'])
 def add_todo():
-    add_item(request.form.get('todo-title'))
+    add_item(request.form.get('todo-title'), os.getenv('CORNDEL_TODO_LIST_ID'))
 
     return redirect(url_for('index'))
 
 @app.route('/todo/update', methods=['POST'])
 def update_todo():
-    todo = get_items()
-
-    for item in todo:
+    todo_cards = get_items()
+    
+    for todo_card in todo_cards:
         form_item = dict(request.form)
-        id = str(item['id'])
-        if id in form_item:            
-            item['status'] = 'Completed'
-        else:            
-            item['status'] = 'Not Started'
-
-        save_item(item)
+        todo_card_id = str(todo_card['id'])
+        if todo_card_id in form_item:            
+            if len(form_item[todo_card_id]) != 0:
+                # this todo item has been udpated so persist to trello
+                # only get form data for check boxes that are checked
+                save_item(todo_card_id, os.getenv('CORNDEL_DONE_LIST_ID'))            
+        else:
+            save_item(todo_card_id, os.getenv('CORNDEL_TODO_LIST_ID'))                        
 
     return redirect(url_for('index'))

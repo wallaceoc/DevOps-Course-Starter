@@ -52,3 +52,13 @@ You should see output similar to the following:
  * Debugger PIN: 226-556-590
 ```
 Now visit [`http://localhost:5000/`](http://localhost:5000/) in your web browser to view the app.
+
+Module
+TRELLO
+Step 1
+Create a new TRELLO account
+Visit ['https://trello.com/signup'](https://trello.com/signup) in your browser and follow the setup instructions for a new account
+
+Step 2
+Create a new TRELLO API KEY and TOKEN
+Visit ['https://developer.atlassian.com/cloud/trello/guides/rest-api/api-introduction/'](https://developer.atlassian.com/cloud/trello/guides/rest-api/api-introduction/) for detailed instructions on how to both create an API_KEY and TOKEN
