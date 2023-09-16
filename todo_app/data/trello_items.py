@@ -2,12 +2,6 @@ from flask import session
 
 import os, requests
 
-_DEFAULT_ITEMS = [
-    { 'id': 1, 'status': 'Not Started', 'title': 'List saved todo items' },
-    { 'id': 2, 'status': 'Not Started', 'title': 'Allow new items to be added' }
-]
-
-
 def get_items():
     """
     Fetches all saved items from the session.
@@ -43,7 +37,7 @@ def get_item(id):
         item: The saved item, or None if no items match the specified ID.
     """
     items = get_items()
-    return next((item for item in items if item['id'] == int(id)), None)
+    return next((item for item in items if item['id'] == id), None)
 
 
 def add_item(title, list_id):

@@ -9,22 +9,49 @@
 
   <div class="row">
     <div class="col-md-12">
-      <h2>Items</h2>
+      <h2>TODO Items</h2>
 
-      <form method="post" action="/todo/update">
-        <ul class="list-group mb-4">
-          {% for item in todo %}
-            <li>
-              <input type="checkbox" id="{{ item.id }}" name="{{ item.id }}" value="{{ item.idList }}" {{'checked' if item.idList==completed_list_id else ''}}>
-                {{item.name}}
-              </input>
-            </li>
-          {% endfor %}
-        </ul>
-        <div class="input-group mb-3">
-          <button>Update List Status</button>
-        </div>
-      </form>      
+      <div>
+        <p>
+          <ul>
+            <li>Toggle item between ToDo and Completed using the "Update Status" buttons</li>
+            <li>Update Status of all items by toggling the checkboxes and submit via the "Update List Status" button</li>
+          </ul>
+        </p>
+      </div>
+
+      <form id="update_all_form" method="post" action="{{ url_for('update_todo') }}"></form>
+      <form id="update_single_form" method="post" action="/todo/update_item"></form>
+
+      <table>
+        <tr>
+          <th>Status</th>
+          <th>TODO Item</th>
+          <th>Toggle Status</th>
+        </tr>
+        {% for item in todo %}
+        <tr>
+          <td>
+            <input form="update_all_form" type="checkbox" id="{{ item.id }}" name="{{ item.id }}" 
+                value="{{ item.idList }}" {{'checked' if item.idList==completed_list_id else ''}}>
+            </input>
+          </td>
+          <td>{{item.name}}</td>
+          <td>
+            <input form="update_single_form" type="submit" id="{{ item.id }}" name="{{ item.id }}" 
+                value="Update Status" style="float: right;" >              
+            </input>
+          </td>          
+        </tr>
+        {% endfor %}        
+      </table>
+      
+      <p></p>
+
+      <div class="input-group mb-3">
+        <button form="update_all_form">Update List Status</button>
+      </div>
+
     </div>
   </div>
 
