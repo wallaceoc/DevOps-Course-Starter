@@ -1,5 +1,7 @@
 from flask import session
 
+from todo_app.data.Item import Item
+
 import os, requests
 
 def get_items():
@@ -16,15 +18,15 @@ def get_items():
     request_url = API+BOARD+'?key='+os.getenv('TRELLO_API_KEY')+'&token='+os.getenv('TRELLO_TOKEN')
     trello_response = requests.get(request_url)
 
-    return build_items_dict(trello_response.json())
+    return build_card_items(trello_response.json())
 
-def build_items_dict(trello_response):
-    cards = []
+def build_card_items(trello_response):
+    card_items = []
     
     for trello_list in trello_response:
-        cards.append(trello_list)
+        card_items.append(Item.from_trello_card(trello_list))
 
-    return cards
+    return card_items
 
 def get_item(id):
     """
@@ -37,7 +39,7 @@ def get_item(id):
         item: The saved item, or None if no items match the specified ID.
     """
     items = get_items()
-    return next((item for item in items if item['id'] == id), None)
+    return next((item for item in items if item.id == id), None)
 
 
 def add_item(title, list_id):

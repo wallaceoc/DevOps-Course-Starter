@@ -11,9 +11,9 @@ app.config.from_object(Config())
 
 @app.route('/')
 def index():
-    todo = get_items()
+    todo_cards = get_items()
     corndel_done_list = os.getenv('CORNDEL_DONE_LIST_ID')
-    sorted_todo = sorted(todo, key=lambda x: x['idList'], reverse=True)
+    sorted_todo = sorted(todo_cards, key=lambda x: x.idList, reverse=True)
     return render_template('index.html', todo=sorted_todo, completed_list_id=corndel_done_list)
 
 @app.route('/todo/submit', methods=['POST'])
@@ -28,7 +28,7 @@ def update_todo():
 
     for todo_card in todo_cards:
         form_item = dict(request.form)
-        todo_card_id = str(todo_card['id'])
+        todo_card_id = str(todo_card.id)
         if todo_card_id in form_item:
             if len(form_item[todo_card_id]) != 0:
                 # this todo item has been udpated so persist to trello
@@ -46,7 +46,7 @@ def update_single_item():
 
     todo_card = get_item(form_item_id)
     done_list_id = os.getenv('CORNDEL_DONE_LIST_ID')
-    if(todo_card['idList'] == done_list_id):
+    if(todo_card.idList == done_list_id):
         save_item(form_item_id, os.getenv('CORNDEL_TODO_LIST_ID'))
     else:
         save_item(form_item_id, done_list_id)
