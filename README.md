@@ -62,3 +62,19 @@ Visit ['https://trello.com/signup'](https://trello.com/signup) in your browser a
 Step 2
 Create a new TRELLO API KEY and TOKEN
 Visit ['https://developer.atlassian.com/cloud/trello/guides/rest-api/api-introduction/'](https://developer.atlassian.com/cloud/trello/guides/rest-api/api-introduction/) for detailed instructions on how to both create an API_KEY and TOKEN
+
+## TESTING
+Add pytest as a dependency of our project by running poetry add pytest. This should download pytest and also update pyproject.toml for you.
+'''bash
+$ poetry add pytest
+'''
+
+Run ALL the tests by typing pytest from the command line
+'''bash
+$ pytest
+'''
+
+Run the tests from a specific class
+'''bash
+pytest todo_app/tests/<file.py>
+'''bash

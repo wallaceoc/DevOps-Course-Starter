@@ -15,6 +15,8 @@ def get_items():
     BOARD_ID = os.getenv('CORNDEL_BOARD_ID')
     API = os.getenv('TRELLO_API')
     BOARD = os.getenv('TRELLO_BOARD').replace('{id}', BOARD_ID)
+    
+    # https://api.trello.com/1/board/{board_id}/cards
     request_url = API+BOARD+'?key='+os.getenv('TRELLO_API_KEY')+'&token='+os.getenv('TRELLO_TOKEN')
     trello_response = requests.get(request_url)
 
