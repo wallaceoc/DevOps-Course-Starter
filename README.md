@@ -71,10 +71,10 @@ $ poetry add pytest
 
 Run ALL the tests by typing pytest from the command line
 '''bash
-$ pytest
+$ poetry run pytest
 '''
 
 Run the tests from a specific class
 '''bash
-pytest todo_app/tests/<file.py>
+poetry run pytest todo_app/tests/<file.py>
 '''bash
