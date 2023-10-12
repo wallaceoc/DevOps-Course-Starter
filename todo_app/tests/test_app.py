@@ -27,6 +27,7 @@ class StubResponse():
 # Stub replacement for requests.get(url)
 def stub(url, params={}):
     test_board_id = os.environ.get('CORNDEL_BOARD_ID')
+    test_card_id = "123abc"    
     trello_key = os.environ.get('TRELLO_API_KEY')
     trello_token = os.environ.get('TRELLO_TOKEN')
 
@@ -52,6 +53,49 @@ def stub(url, params={}):
             'due': '2023-09-05T09:59:00.000Z'
         }]
         return StubResponse(fake_response_data)
+    
+    elif url == f'https://api.trello.com/1/card/{test_card_id}?key={trello_key}&token={trello_token}':
+        fake_response_data = [{
+            'id': '123abc',
+            'name': 'TestCard1',
+            'idList': '64faketodo1234e86c4c2ff3',
+            'desc': "Test desc",
+            'due': None},
+            {'id': '456def',
+            'name': 'TestCard2',
+            'idList': '64fakedone999985b9aac33',
+            'desc': "Test desc 2",
+            'due': '2023-09-05T09:59:00.000Z'
+        }]
+        return StubResponse(fake_response_data)
+
+    raise Exception(f'Integration test did not expect URL "{url}"')
+
+# Stub replacement for requests.get(url)
+def stub_put_post(url, data={}):
+    test_card_id = "123abc"    
+    trello_key = os.environ.get('TRELLO_API_KEY')
+    trello_token = os.environ.get('TRELLO_TOKEN')
+
+    if url == f'https://api.trello.com/1/cards/{test_card_id}?key={trello_key}&token={trello_token}':
+        fake_response_data = [{
+            'id': '123abc',
+            'name': 'TestCard1',
+            'idList': '64fakedone999985b9aac33',
+            'desc': "Test desc",
+            'due': None
+        }]
+        return StubResponse(fake_response_data)
+    
+    elif url == f'https://api.trello.com/1/?key={trello_key}&token={trello_token}':
+        fake_response_data = [{
+            'id': '999aaa',
+            'name': 'TestAddCard2',
+            'idList': '64faketodo1234e86c4c2ff3',
+            'desc': "Test desc 3",
+            'due': None
+        }]
+        return StubResponse(fake_response_data)
 
     raise Exception(f'Integration test did not expect URL "{url}"')
 
@@ -64,4 +108,24 @@ def test_index_page(monkeypatch, client):
     assert response.status_code == 200
     assert 'TestCard1' in response.data.decode()
     assert 'Test desc 2' in response.data.decode()
+    assert False == response.is_json
+
+def test_update_item(monkeypatch, client):
+    # This replaces any call to requests.get with our own function
+    monkeypatch.setattr(requests, 'get', stub)
+    monkeypatch.setattr(requests, 'put', stub_put_post)
+
+    response = client.post('/todo/update_item', data={'123abc': 'Update Status'})
+
+    assert response.status_code == 302  # redirect
+    assert False == response.is_json
+
+def test_submit(monkeypatch, client):
+    # This replaces any call to requests.get with our own function
+    monkeypatch.setattr(requests, 'get', stub)
+    monkeypatch.setattr(requests, 'put', stub_put_post)
+
+    response = client.post('/todo/submit', data={'todo-title': 'TestAddCard2'})
+
+    assert response.status_code == 302  # redirect
     assert False == response.is_json
