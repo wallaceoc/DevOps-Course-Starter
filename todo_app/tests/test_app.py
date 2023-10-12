@@ -71,6 +71,64 @@ def stub(url, params={}):
 
     raise Exception(f'Integration test did not expect URL "{url}"')
 
+# Stub replacement for requests.get(url)
+def stub_post(url, data={}):
+    test_board_id = os.environ.get('CORNDEL_BOARD_ID')
+    test_card_id = "123abc"    
+    trello_key = os.environ.get('TRELLO_API_KEY')
+    trello_token = os.environ.get('TRELLO_TOKEN')
+
+    '''
+    if url == f'https://api.trello.com/1/boards/{test_board_id}/lists':
+        fake_response_data = [{
+            'id': '123abc',
+            'name': 'To Do',
+            'cards': [{'id': '456', 'name': 'Test card'}]
+        }]
+        return StubResponse(fake_response_data)
+    
+    elif url == f'https://api.trello.com/1/board/{test_board_id}/cards?key={trello_key}&token={trello_token}':
+        fake_response_data = [{
+            'id': '123abc',
+            'name': 'TestCard1',
+            'idList': '64faketodo1234e86c4c2ff3',
+            'desc': "Test desc",
+            'due': None},
+            {'id': '456def',
+            'name': 'TestCard2',
+            'idList': '64fakedone999985b9aac33',
+            'desc': "Test desc 2",
+            'due': '2023-09-05T09:59:00.000Z'
+        }]
+        return StubResponse(fake_response_data)
+    
+    elif url == f'https://api.trello.com/1/card/{test_card_id}?key={trello_key}&token={trello_token}':
+        fake_response_data = [{
+            'id': '123abc',
+            'name': 'TestCard1',
+            'idList': '64faketodo1234e86c4c2ff3',
+            'desc': "Test desc",
+            'due': None},
+            {'id': '456def',
+            'name': 'TestCard2',
+            'idList': '64fakedone999985b9aac33',
+            'desc': "Test desc 2",
+            'due': '2023-09-05T09:59:00.000Z'
+        }]
+        return StubResponse(fake_response_data)
+    '''
+    if url == f'https://api.trello.com/1/cards/{test_card_id}?key={trello_key}&token={trello_token}':
+        fake_response_data = [{
+            'id': '123abc',
+            'name': 'TestCard1',
+            'idList': '64fakedone999985b9aac33',
+            'desc': "Test desc",
+            'due': None
+        }]
+        return StubResponse(fake_response_data)
+
+    raise Exception(f'Integration test did not expect URL "{url}"')
+
 def test_index_page(monkeypatch, client):
     # This replaces any call to requests.get with our own function
     monkeypatch.setattr(requests, 'get', stub)
@@ -85,14 +143,10 @@ def test_index_page(monkeypatch, client):
 def test_update_item(monkeypatch, client):
     # This replaces any call to requests.get with our own function
     monkeypatch.setattr(requests, 'get', stub)
-    monkeypatch.setattr(requests, 'put', stub)
+    monkeypatch.setattr(requests, 'put', stub_post)
 
-    #trello_response = requests.put(request_url, data={'idList': list_id})
     test_done_list_id = os.environ.get('CORNDEL_DONE_LIST_ID')
-    #'64f666e31523671500de9f0f': 'Update Status'
-    response = client.post('/todo/update_item', data={'123abc', 'Update Status'})
+    response = client.post('/todo/update_item', data={'123abc': 'Update Status'})
 
-    assert response.status_code == 200
-    assert 'TestCard1' in response.data.decode()
-    assert 'Test desc 2' in response.data.decode()
+    assert response.status_code == 302
     assert False == response.is_json
