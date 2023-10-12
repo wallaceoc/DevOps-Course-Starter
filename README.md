@@ -78,3 +78,8 @@ Run the tests from a specific class
 '''bash
 poetry run pytest todo_app/tests/<file.py>
 '''bash
+
+## Selenium tests
+Install the selenium python package
+$ pip install -U selenium
+

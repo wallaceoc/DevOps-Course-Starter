@@ -128,4 +128,5 @@ def test_submit(monkeypatch, client):
     response = client.post('/todo/submit', data={'todo-title': 'TestAddCard2'})
 
     assert response.status_code == 302  # redirect
+    
     assert False == response.is_json
