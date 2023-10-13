@@ -82,4 +82,7 @@ poetry run pytest todo_app/tests/<file.py>
 ## Selenium tests
 Install the selenium python package
 $ pip install -U selenium
+$ poetry add selenium
 
+Run the End to End tests
+$ poetry run pytest todo_app/tests_e2e

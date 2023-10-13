@@ -57,7 +57,7 @@ def add_item(title, list_id):
     """
     # Add the item to the list
     API = os.getenv('TRELLO_API')
-    CARD = os.getenv('TRELLO_CARDs')
+    CARD = os.getenv('TRELLO_CARDS')
     request_url = API+CARD+'?key='+os.getenv('TRELLO_API_KEY')+'&token='+os.getenv('TRELLO_TOKEN')
 
     trello_response = requests.post(request_url, data={'name': title, 'idList': list_id})
