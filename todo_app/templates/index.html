@@ -22,33 +22,73 @@
       </div>
 
       <form id="update_all_form" method="post" action="{{ url_for('update_todo') }}"></form>
-      <form id="update_single_form" method="post" action="/todo/update_item"></form>
+      <form id="update_single_form" method="post" action="{{ url_for('update_single_item') }}"></form>
 
       <table>
         <tr>
-          <th>Status</th>
-          <th>TODO Item</th>
-          <th>Description</th>
-          <th>Due Date</th>
-          <th>Toggle Status</th>
+          <th>TO DO</th>
+          <th></th>
+          <th>DONE</th>
         </tr>
-        {% for item in todo %}
         <tr>
-          <td>
-            <input form="update_all_form" type="checkbox" id="{{ item.id }}" name="{{ item.id }}" 
-                value="{{ item.idList }}" {{'checked' if item.idList==completed_list_id else ''}}>
-            </input>
+          <td valign="top">
+            <table>
+              <tr>
+                <th>Status</th>
+                <th>TODO Item</th>
+                <th>Description</th>
+                <th>Due Date</th>
+                <th>Toggle Status</th>
+              </tr>
+              {% for item in todo_view_model.todo_items %}
+              <tr>
+                <td>
+                  <input form="update_all_form" type="checkbox" id="{{ item.id }}" name="{{ item.id }}" 
+                      value="{{ item.idList }}" >
+                  </input>
+                </td>
+                <td>{{item.name}}</td>
+                <td>{{item.description}}</td>
+                <td><input type="date" id="dueDate" name="dueDate" value="{{item.datePickerDueDate()}}"></td>
+                <td>
+                  <input form="update_single_form" type="submit" id="{{ item.id }}" name="{{ item.id }}" 
+                      value="Update Status" style="float: right;" >              
+                  </input>
+                </td>          
+              </tr>
+              {% endfor %}        
+            </table>
           </td>
-          <td>{{item.name}}</td>
-          <td>{{item.description}}</td>
-          <td><input type="date" id="dueDate" name="dueDate" value="{{item.datePickerDueDate()}}"></td>
-          <td>
-            <input form="update_single_form" type="submit" id="{{ item.id }}" name="{{ item.id }}" 
-                value="Update Status" style="float: right;" >              
-            </input>
-          </td>          
+          <td></td>
+          <td valign="top">
+            <table>
+              <tr>
+                <th>Status</th>
+                <th>TODO Item</th>
+                <th>Description</th>
+                <th>Due Date</th>
+                <th>Toggle Status</th>
+              </tr>
+              {% for item in todo_view_model.done_items %}
+              <tr>
+                <td>
+                  <input form="update_all_form" type="checkbox" id="{{ item.id }}" name="{{ item.id }}" 
+                      value="{{ item.idList }}" 'checked' >
+                  </input>
+                </td>
+                <td>{{item.name}}</td>
+                <td>{{item.description}}</td>
+                <td><input type="date" id="dueDate" name="dueDate" value="{{item.datePickerDueDate()}}"></td>
+                <td>
+                  <input form="update_single_form" type="submit" id="{{ item.id }}" name="{{ item.id }}" 
+                      value="Update Status" style="float: right;" >              
+                  </input>
+                </td>          
+              </tr>
+              {% endfor %}        
+            </table>
+          </td>
         </tr>
-        {% endfor %}        
       </table>
       
       <p></p>
@@ -75,7 +115,7 @@
           <input type="text" id="todo-title" class="form-control" placeholder="Todo Item" name="todo-title" type="text" required/>            
         </div>
         <div class="input-group mb-3">
-          <button>Add Item</button>
+          <button id="todo-submit">Add Item</button>
         </div>            
       </form>      
     </div>

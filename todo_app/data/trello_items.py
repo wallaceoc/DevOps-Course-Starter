@@ -15,6 +15,8 @@ def get_items():
     BOARD_ID = os.getenv('CORNDEL_BOARD_ID')
     API = os.getenv('TRELLO_API')
     BOARD = os.getenv('TRELLO_BOARD').replace('{id}', BOARD_ID)
+    
+    # https://api.trello.com/1/board/{board_id}/cards
     request_url = API+BOARD+'?key='+os.getenv('TRELLO_API_KEY')+'&token='+os.getenv('TRELLO_TOKEN')
     trello_response = requests.get(request_url)
 
@@ -55,7 +57,7 @@ def add_item(title, list_id):
     """
     # Add the item to the list
     API = os.getenv('TRELLO_API')
-    CARD = os.getenv('TRELLO_CARDs')
+    CARD = os.getenv('TRELLO_CARDS')
     request_url = API+CARD+'?key='+os.getenv('TRELLO_API_KEY')+'&token='+os.getenv('TRELLO_TOKEN')
 
     trello_response = requests.post(request_url, data={'name': title, 'idList': list_id})
@@ -73,6 +75,8 @@ def save_item(card_id, list_id):
 
     API = os.getenv('TRELLO_API')
     CARD = os.getenv('TRELLO_CARD').replace('{id}', card_id)
+    
+    # https://api.trello.com/1/cards/{card_id}?key=....
     request_url = API+CARD+'?key='+os.getenv('TRELLO_API_KEY')+'&token='+os.getenv('TRELLO_TOKEN')
 
     trello_response = requests.put(request_url, data={'idList': list_id})
