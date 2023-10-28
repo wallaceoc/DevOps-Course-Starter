@@ -33,7 +33,7 @@ def stub(url, params={}):
 
     if url == f'https://api.trello.com/1/boards/{test_board_id}/lists':
         fake_response_data = [{
-            'id': '123abc',
+            'id': test_card_id,
             'name': 'To Do',
             'cards': [{'id': '456', 'name': 'Test card'}]
         }]
@@ -41,7 +41,7 @@ def stub(url, params={}):
     
     elif url == f'https://api.trello.com/1/board/{test_board_id}/cards?key={trello_key}&token={trello_token}':
         fake_response_data = [{
-            'id': '123abc',
+            'id': test_card_id,
             'name': 'TestCard1',
             'idList': '64faketodo1234e86c4c2ff3',
             'desc': "Test desc",
@@ -56,7 +56,7 @@ def stub(url, params={}):
     
     elif url == f'https://api.trello.com/1/card/{test_card_id}?key={trello_key}&token={trello_token}':
         fake_response_data = [{
-            'id': '123abc',
+            'id': test_card_id,
             'name': 'TestCard1',
             'idList': '64faketodo1234e86c4c2ff3',
             'desc': "Test desc",
@@ -79,7 +79,7 @@ def stub_put_post(url, data={}):
 
     if url == f'https://api.trello.com/1/cards/{test_card_id}?key={trello_key}&token={trello_token}':
         fake_response_data = [{
-            'id': '123abc',
+            'id': test_card_id,
             'name': 'TestCard1',
             'idList': '64fakedone999985b9aac33',
             'desc': "Test desc",
@@ -108,7 +108,7 @@ def test_index_page(monkeypatch, client):
     assert response.status_code == 200
     assert 'TestCard1' in response.data.decode()
     assert 'Test desc 2' in response.data.decode()
-    assert False == response.is_json
+    assert "text/html" in response.content_type
 
 def test_update_item(monkeypatch, client):
     # This replaces any call to requests.get with our own function

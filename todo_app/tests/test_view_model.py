@@ -22,6 +22,7 @@ def test_view_model_todo_property(view_model: ViewModel):
     todo_items = view_model.todo_items
 
     assert len(todo_items) == 1
+    assert todo_items[0].status == "To Do"
 
 def test_view_model_doing_property(view_model: ViewModel):
     doing_items = view_model.doing_items

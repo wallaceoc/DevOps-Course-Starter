@@ -44,7 +44,7 @@
               <tr>
                 <td>
                   <input form="update_all_form" type="checkbox" id="{{ item.id }}" name="{{ item.id }}" 
-                      value="{{ item.idList }}" {{'checked' if item.status=='Done' else ''}}>
+                      value="{{ item.idList }}" >
                   </input>
                 </td>
                 <td>{{item.name}}</td>
@@ -73,7 +73,7 @@
               <tr>
                 <td>
                   <input form="update_all_form" type="checkbox" id="{{ item.id }}" name="{{ item.id }}" 
-                      value="{{ item.idList }}" {{'checked' if item.status=='Done' else ''}}>
+                      value="{{ item.idList }}" 'checked' >
                   </input>
                 </td>
                 <td>{{item.name}}</td>
