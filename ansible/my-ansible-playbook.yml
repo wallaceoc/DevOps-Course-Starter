@@ -1,0 +1,91 @@
+- name: Simple Playbook
+  hosts: managed_nodes
+  remote_user: ec2-user
+
+  vars_prompt:
+    - name: secret_key
+      prompt: Input the SECRET KEY
+
+    - name: base_api_url
+      prompt: Input the TRELLO BASE API
+
+    - name: board_id
+      prompt: Input the Corndel BOARD ID
+
+    - name: todo_list_id
+      prompt: Input the Corndel TODO LIST ID
+
+    - name: done_list_id
+      prompt: Input the Corndel DONE LIST ID
+
+    - name: trello_api_key
+      prompt: Input the TRELLO API KEY
+
+    - name: trello_token
+      prompt: Input the TRELO TOKEN
+
+  tasks:
+  - name: Install Git on managed host
+    ansible.builtin.yum:      
+      name: git
+      state: installed
+    become: yes
+
+  - name: Install Python 3.11 on managed host
+    ansible.builtin.yum:
+      name: python311
+      state: installed
+    become: yes
+
+  - name: Install Poetry
+    ansible.builtin.shell:
+      cmd: curl -sSL https://install.python-poetry.org | POETRY_HOME=/usr/local/bin/poetry python3 - > poetry_install.txt
+      creates: /usr/local/bin
+    become: yes
+
+  - name: Add Poetry path
+    copy:
+      dest: /etc/profile.d/custom-path.sh
+      content: 'PATH=$PATH:/usr/local/bin/poetry/bin'
+    become: yes
+
+  - name: Add the /opt/todoapp folder
+    ansible.builtin.file:
+      path: /opt/todoapp
+      state: directory
+      owner: ec2-user
+      group: ec2-user
+    become: yes
+
+  - name: Checkout the latest version of ToDo app code
+    ansible.builtin.git:
+      repo: https://github.com/wallaceoc/DevOps-Course-Starter.git
+      dest: /opt/todoapp
+      version: module-4
+
+  - name: Install Project Dependencies for todoapp
+    ansible.builtin.command: /usr/local/bin/poetry/bin/poetry install
+    args:
+      chdir: /opt/todoapp
+    become: yes
+
+  - name: Create a .env file on the managed host (.env.j2 template)
+    # Note the tempalte needs to exist on the Controller VM
+    ansible.builtin.template:
+      src: ~/Module4/.env.j2
+      dest: /opt/todoapp/.env
+      owner: ec2-user
+
+  - name: Copy todoapp.service to the managed node
+    ansible.builtin.copy:
+      src: ~/Module4/todoapp.service
+      dest: /etc/systemd/system/
+    become: yes
+
+  - name: Start the todoapp service
+    ansible.builtin.systemd:
+      name: todoapp.service
+      state: restarted
+      daemon_reload: true
+    become: yes
+
