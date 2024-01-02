@@ -8,6 +8,7 @@
 
     - name: base_api_url
       prompt: Input the TRELLO BASE API
+      default: https://api.trello.com/1/
 
     - name: board_id
       prompt: Input the Corndel BOARD ID
@@ -25,9 +26,11 @@
       prompt: Input the TRELO TOKEN
 
   tasks:
-  - name: Install Git on managed host
-    ansible.builtin.yum:      
-      name: git
+  - name: Install Git & Python 3.11 on managed host
+    ansible.builtin.yum:
+      name:
+        - git
+        - python311
       state: installed
     become: yes
 
