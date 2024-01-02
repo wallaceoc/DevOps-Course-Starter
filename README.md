@@ -88,3 +88,14 @@ $ poetry add selenium
 
 Run the End to End tests
 $ poetry run pytest todo_app/tests_e2e
+
+## Ansible Provisioning
+Run the below command to provision a VM from a Host node.
+Note: you must ensure the necessary files from the playbook (in this case my-ansible-playbook.yml)
+exist on the Controller
+
+$ ansible-playbook my-ansible-playbook.yml -i ansible-inventory.ini
+
+## Module 4 stretch goal
+
+$ poetry add gunicorn
