@@ -20,11 +20,12 @@ FROM base as production
 RUN poetry install --without dev
 COPY todo_app todo_app
 
-ENTRYPOINT poetry run gunicorn --bind 0.0.0.0:80 "todo_app.app:create_app()"
+ENTRYPOINT poetry run gunicorn --bind 0.0.0.0:$PORT "todo_app.app:create_app()"
 
 FROM base as development
 
 RUN poetry install
-ENTRYPOINT poetry run flask run --host=0.0.0.0 --port=$PORT
+ENTRYPOINT [ "/bin/bash", "-c", "poetry run flask run --host=0.0.0.0 --port=$PORT" ]
+#ENTRYPOINT poetry run flask run --host=0.0.0.0 --port=$PORT
 
 # Configure for development

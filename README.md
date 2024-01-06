@@ -108,10 +108,15 @@ $ poetry add gunicorn
    '''bash
    docker build --target development --tag todo-app:dev .
    '''
-2. Run the container 
+2. Run the container (2 options)
    2.1 Docker Command
    '''bash
    docker run --env-file .env --publish 5000:80 --mount type=bind,source="$(pwd)"/todo_app,target=/app/todo_app/todo_app todo-app:dev
+   '''
+
+   2.2 Docker Compose.  This will start tests (unit, integration and end-to-end).  Tests will be automatically rerun when a file change is detected.  ***Note: If you add the --build option, it is forced to build the images even when not needed
+   '''bash
+   docker compose up [--build]
    '''
 
 #### Production Mode
@@ -124,3 +129,4 @@ $ poetry add gunicorn
    '''bash
    docker run --env-file .env --publish 5000:80 todo-app:prod
    '''
+
