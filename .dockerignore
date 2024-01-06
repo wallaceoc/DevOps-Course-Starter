@@ -9,7 +9,6 @@
 
 ansible
 
-poetry.lock
 poetry.toml
 
 README.md
