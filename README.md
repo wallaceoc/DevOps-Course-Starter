@@ -108,6 +108,7 @@ $ poetry add gunicorn
    '''bash
    docker build --target development --tag todo-app:dev .
    '''
+
 2. Run the container (2 options)
    2.1 Docker Command
    '''bash

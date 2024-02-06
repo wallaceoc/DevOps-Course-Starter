@@ -1,6 +1,6 @@
 FROM python:3.11.4-buster as base
 
-# Perform common operations, dependnecy installations etc...
+# Perform common operations, dependency installations etc...
 
 RUN apt-get update
 
